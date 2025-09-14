@@ -1,346 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rediscover ATK SPD Calculator RPG</title>
-    <style>
-        body { font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; padding: 20px; background: #f4f4f4; }
-        h1, h2 { text-align: center; color: #333; }
-        form { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        label { display: block; margin: 10px 0 5px; font-weight: bold; }
-        select, input[type="range"] { width: 100%; padding: 8px; margin-bottom: 10px; }
-        input[type="range"] { margin-bottom: 5px; }
-        input[type="number"] { width: 100px; padding: 8px; }
-        button { background: #007bff; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 4px; margin: 5px; }
-        button:hover { background: #0056b3; }
-        #progress { width: 100%; height: 20px; background: #ddd; border-radius: 10px; overflow: hidden; margin: 10px 0; }
-        #progressBar { height: 100%; background: linear-gradient(to right, #ff6b6b, #4ecdc4); transition: width 0.3s; }
-        #results { text-align: center; font-size: 1.2em; margin: 20px 0; }
-        .optimizer { background: #e8f4fd; padding: 15px; border-radius: 8px; margin-top: 20px; }
-        .alternates { display: flex; justify-content: space-around; flex-wrap: wrap; }
-        .alternate { background: #f0f0f0; padding: 10px; margin: 5px; border-radius: 4px; cursor: pointer; }
-        .alternate:hover { background: #ddd; }
-        footer { text-align: center; margin-top: 30px; font-size: 0.8em; color: #666; }
-    </style>
+<meta charset="utf-8" />
+<title data-i18n="title">Rediscover ATK SPD Calculator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="EHT Calc" />
+
+<link rel="icon" href="assets/favicon.ico?v=1">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon.png?v=1">
+<link rel="apple-touch-icon" href="assets/favicon.png?v=1">
+<meta property="og:image" content="assets/preview.jpg">
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+  
 </head>
-<body>
-    <h1 data-i18n="title">Rediscover ATK SPD Calculator RPG</h1>
 
-    <label for="language">Language / Idioma</label>
-    <select id="language">
-        <option value="en">English</option>
-        <option value="es">Español</option>
-        <!-- Add more languages here, e.g., <option value="fr">Français</option> -->
-    </select>
+<body class="theme-Primal">
+<header>
+  <h1><span data-i18n="title">Rediscover ATK SPD Calculator</span> <small>RPG</small></h1>
+  <select id="langSwitcher" style="float:right;margin-top:-26px">
+    <option value="en">English</option>
+    <option value="ko">한국어</option>
+    <option value="ph">Filipino</option>
+    <option value="id">Bahasa</option>
+    <option value="es">Español</option>
+    <option value="vi">Tiếng Việt</option>
+  </select>
+</header>
 
-    <form id="calcForm">
-        <fieldset>
-            <legend><h2 data-i18n="baseBuffs">Base & Buffs</h2></legend>
-            
-            <label for="class" data-i18n="class">Class</label>
-            <select id="class">
-                <option value="0" data-i18n="berserker">Berserker (0% base)</option>
-                <option value="5" data-i18n="paladin">Paladin (+5% base)</option>
-                <option value="10" data-i18n="ranger">Ranger (+10% base)</option>
-                <option value="15" data-i18n="sorcerer">Sorcerer (+15% base)</option>
-            </select>
+<main>
+  <!-- Base & Buffs -->
+<div class="card"><div class="inner">
+  <h2 data-i18n="buffs">Base & Buffs</h2>
+  <div class="section">
+    <div class="row">
+      <label data-i18n="class">Class</label>
+      <div class="seg" id="classSeg">
+        <button type="button" data-val="Berserker"><span class="icon bers"></span> <span data-i18n="berserker">Berserker</span></button>
+        <button type="button" data-val="Paladin"><span class="icon pala"></span> <span data-i18n="paladin">Paladin</span></button>
+        <button type="button" data-val="Ranger"><span class="icon rang"></span> <span data-i18n="ranger">Ranger</span></button>
+        <button type="button" data-val="Sorcerer" class="is-active"><span class="icon sorc"></span> <span data-i18n="sorcerer">Sorcerer</span></button>
+      </div>
+      <select id="cls" class="hidden"></select>
+    </div>
 
-            <label for="weapon" data-i18n="weapon">Weapon</label>
-            <select id="weapon">
-                <option value="0" data-i18n="original">Original (0%)</option>
-                <option value="5" data-i18n="primal">Primal (+5%)</option>
-                <option value="10" data-i18n="chaos">Chaos (+10%)</option>
-                <option value="15" data-i18n="abyss">Abyss (+15%)</option>
-                <option value="20" data-i18n="pvpBoss">PVP/Boss (+20%)</option>
-            </select>
+    <div class="row">
+      <label data-i18n="weapon">Weapon</label>
+      <div class="seg" id="weaponSeg">
+        <button type="button" data-val="Original" class="is-active"><span data-i18n="setOriginal">Original</span></button>
+        <button type="button" data-val="Primal"><span data-i18n="setPrimal">Primal</span></button>
+        <button type="button" data-val="Chaos"><span data-i18n="setChaos">Chaos</span></button>
+        <button type="button" data-val="Abyss"><span data-i18n="setAbyss">Abyss</span></button>
+        <button type="button" data-val="PVP/Boss"><span data-i18n="setPvP">PVP/Boss</span></button>
+      </div>
+      <select id="weap" class="hidden"></select>
+    </div>
 
-            <label for="characteristic" data-i18n="characteristic">Characteristic</label>
-            <select id="characteristic">
-                <option value="0" data-i18n="none">None</option>
-                <option value="7" data-i18n="heroic">Heroic (+7%)</option>
-                <option value="10" data-i18n="swift">Swift (+10%)</option>
-            </select>
+    <!-- Characteristic -->
+<div class="row">
+  <label data-i18n="char">Characteristic</label>
+  <select id="char"></select>
+</div>
 
-            <label for="color" data-i18n="atkSpdColour">Atk SPD Colour</label>
-            <select id="color">
-                <option value="0" data-i18n="normal">Normal (+0%)</option>
-                <option value="10" data-i18n="blue">Blue (+10%)</option>
-                <option value="20" data-i18n="orange">Orange (+20%)</option>
-                <option value="30" data-i18n="purple">Purple (+30%)</option>
-            </select>
+<!-- Atk SPD Colour -->
+<div class="row">
+  <label data-i18n="col">Atk SPD Colour</label>
+  <select id="col"></select>
+</div>
 
-            <label for="guild" data-i18n="guildBuff">Guild Buff</label>
-            <input type="number" id="guild" min="0" max="50" value="0"> %
+<!-- Guild Buff -->
+<div class="row">
+  <label data-i18n="guild">Guild Buff</label>
+  <div class="pct"><input type="number" id="guild" min="0" max="50" step="0.1" value="0"><span class="suffix">%</span></div>
+</div>
 
-            <label for="secret" data-i18n="secretTech">Secret Tech</label>
-            <input type="number" id="secret" min="0" max="50" value="0"> %
+<!-- Secret Tech -->
+<div class="row">
+  <label data-i18n="secret">Secret Tech</label>
+  <div class="pct"><input type="number" id="secret" min="0" max="50" step="0.1" value="0"><span class="suffix">%</span></div>
+</div>
 
-            <label for="equip" data-i18n="equipmentAtkSpd">Equipment ATK SPD</label>
-            <input type="number" id="equip" min="0" max="100" value="0"> %
+<!-- Equipment ATK SPD -->
+<div class="row">
+  <label data-i18n="equip">Equipment ATK SPD</label>
+  <div class="pct"><input type="number" id="equip" min="0" max="100" step="0.1" value="0"><span class="suffix">%</span></div>
+</div>
 
-            <label for="rune" data-i18n="runeAtkSpd">Rune ATK SPD</label>
-            <input type="number" id="rune" min="0" max="50" value="0"> %
+<!-- Rune ATK SPD -->
+<div class="row">
+  <label data-i18n="rune">Rune ATK SPD</label>
+  <div class="pct"><input type="number" id="rune" min="0" max="50" step="1" value="0"><span class="suffix">%</span></div>
+</div>
 
-            <label for="pet" data-i18n="petGear">Pet Gear</label>
-            <select id="pet">
-                <option value="0" data-i18n="none">None</option>
-                <option value="6" data-i18n="b">B (6%)</option>
-                <option value="9" data-i18n="a">A (9%)</option>
-                <option value="12" data-i18n="s">S (12%)</option>
-            </select>
+<!-- Pet Gear -->
+<div class="row">
+  <label data-i18n="pet">Pet Gear</label>
+  <select id="pet"></select>
+</div>
 
-            <label for="quicken" data-i18n="quicken">Quicken</label>
-            <select id="quicken">
-                <option value="0" data-i18n="none">None</option>
-                <option value="1" data-i18n="lv1">Lv.1 (+1%)</option>
-                <option value="2" data-i18n="lv2">Lv.2 (+2%)</option>
-                <option value="3" data-i18n="lv3">Lv.3 (+3%)</option>
-                <option value="4" data-i18n="lv4">Lv.4 (+4%)</option>
-                <option value="5" data-i18n="lv5">Lv.5 (+5%)</option>
-            </select>
+<!-- Quicken -->
+<div class="row">
+  <label data-i18n="quicken">Quicken</label>
+  <select id="quicken"></select>
+</div>
 
-            <label for="fury" data-i18n="furyLv10">Fury Lv.10</label>
-            <input type="checkbox" id="fury"> <span data-i18n="on">On (+10%)</span>
+    <div class="row" id="furyRow">
+      <label data-i18n="fury">Fury Lv.10</label>
+      <div class="seg"><button type="button" id="furyBtn" data-on="0">Off</button></div>
+      <input id="fury" type="checkbox" class="hidden">
+    </div>
+  </div>
 
-            <label for="target" data-i18n="requiredAtkSpdTarget">Required ATK SPD Target</label>
-            <input type="number" id="target" value="100" min="0" max="200"> %
-        </fieldset>
+  <div style="margin-top:12px" class="section">
+    <div class="row" style="grid-column:1 / -1">
+      <div class="bar" id="pbar"><div id="progressFill"></div></div>
+      <div class="muted" id="progressText">Progress: —</div>
+    </div>
+  </div>
 
-        <div id="results">
-            <p data-i18n="progress">Progress: <span id="progressText">—</span></p>
-            <div id="progress"><div id="progressBar" style="width: 0%"></div></div>
-            <p data-i18n="requiredAtkSpd">Required ATK SPD: <span id="required">—</span>%</p>
-            <p data-i18n="finalAtkSpd">Final ATK SPD: <span id="final">—</span>%</p>
-        </div>
+  <div class="stats">
+    <div class="stat">
+      <label data-i18n="required">Required ATK SPD</label>
+      <div class="value pct"><input id="requiredBox" type="number" readonly><span class="suffix">%</span></div>
+    </div>
+    <div class="stat">
+      <label data-i18n="final">Final ATK SPD</label>
+      <div class="value"><input id="finalBox" type="number" readonly></div>
+    </div>
+  </div>
+</div></div>
 
-        <fieldset class="optimizer">
-            <legend><h2 data-i18n="optimizer">Optimizer</h2></legend>
-            <label for="optimizeSet" data-i18n="optimizeForSet">Optimize for Set</label>
-            <select id="optimizeSet">
-                <option value="15" data-i18n="abyss">Abyss</option>
-                <option value="10" data-i18n="chaos">Chaos</option>
-                <option value="0" data-i18n="original">Original</option>
-                <option value="5" data-i18n="primal">Primal</option>
-            </select>
-            <br>
-            <button type="button" onclick="optimize()" data-i18n="applyOptimal">Apply Optimal</button>
-            <div id="alternates">
-                <div class="alternates">
-                    <div class="alternate" onclick="applyAlternate('rune', 20)" data-i18n="plus20RuneAlt">+20% Rune Alt</div>
-                    <div class="alternate" onclick="applyAlternate('equip', 15)" data-i18n="plus15EquipAlt">+15% Equip Alt</div>
-                </div>
-            </div>
-        </fieldset>
-    </form>
+<!-- Optimizer -->
+<div class="card"><div class="inner">
+  <h2 data-i18n="optimizer">Optimizer</h2>
+  <div class="section">
+    <div class="row">
+      <label data-i18n="optSet">Optimize for Set</label>
+      <div class="seg" id="optSetSeg">
+        <button type="button" data-val="Abyss" class="is-active"><span data-i18n="setAbyss">Abyss</span></button>
+        <button type="button" data-val="Chaos"><span data-i18n="setChaos">Chaos</span></button>
+        <button type="button" data-val="Original"><span data-i18n="setOriginal">Original</span></button>
+        <button type="button" data-val="Primal"><span data-i18n="setPrimal">Primal</span></button>
+      </div>
+      <select id="optSet" class="hidden"></select>
+    </div>
+  </div>
 
-    <footer data-i18n="footer">
-        Guild – Rediscover Alliance | Creator – SAGE | Build v2.6
-    </footer>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin:12px 0">
+    <button class="btn" id="applyBest" data-i18n="apply">Apply Optimal</button>
+  </div>
 
-    <script>
-        const translations = {
-            en: {
-                title: 'Rediscover ATK SPD Calculator RPG',
-                baseBuffs: 'Base & Buffs',
-                class: 'Class',
-                berserker: 'Berserker (0% base)',
-                paladin: 'Paladin (+5% base)',
-                ranger: 'Ranger (+10% base)',
-                sorcerer: 'Sorcerer (+15% base)',
-                weapon: 'Weapon',
-                original: 'Original (0%)',
-                primal: 'Primal (+5%)',
-                chaos: 'Chaos (+10%)',
-                abyss: 'Abyss (+15%)',
-                pvpBoss: 'PVP/Boss (+20%)',
-                characteristic: 'Characteristic',
-                none: 'None',
-                heroic: 'Heroic (+7%)',
-                swift: 'Swift (+10%)',
-                atkSpdColour: 'Atk SPD Colour',
-                normal: 'Normal (+0%)',
-                blue: 'Blue (+10%)',
-                orange: 'Orange (+20%)',
-                purple: 'Purple (+30%)',
-                guildBuff: 'Guild Buff',
-                secretTech: 'Secret Tech',
-                equipmentAtkSpd: 'Equipment ATK SPD',
-                runeAtkSpd: 'Rune ATK SPD',
-                petGear: 'Pet Gear',
-                b: 'B (6%)',
-                a: 'A (9%)',
-                s: 'S (12%)',
-                quicken: 'Quicken',
-                lv1: 'Lv.1 (+1%)',
-                lv2: 'Lv.2 (+2%)',
-                lv3: 'Lv.3 (+3%)',
-                lv4: 'Lv.4 (+4%)',
-                lv5: 'Lv.5 (+5%)',
-                furyLv10: 'Fury Lv.10',
-                on: 'On (+10%)',
-                requiredAtkSpdTarget: 'Required ATK SPD Target',
-                progress: 'Progress: ',
-                requiredAtkSpd: 'Required ATK SPD: ',
-                finalAtkSpd: 'Final ATK SPD: ',
-                optimizer: 'Optimizer',
-                optimizeForSet: 'Optimize for Set',
-                applyOptimal: 'Apply Optimal',
-                plus20RuneAlt: '+20% Rune Alt',
-                plus15EquipAlt: '+15% Equip Alt',
-                footer: 'Guild – Rediscover Alliance | Creator – SAGE | Build v2.6'
-            },
-            es: {
-                title: 'Redescubre Calculadora de ATK SPD RPG',
-                baseBuffs: 'Base y Buffs',
-                class: 'Clase',
-                berserker: 'Berserker (0% base)',
-                paladin: 'Paladín (+5% base)',
-                ranger: 'Ranger (+10% base)',
-                sorcerer: 'Hechicero (+15% base)',
-                weapon: 'Arma',
-                original: 'Original (0%)',
-                primal: 'Primal (+5%)',
-                chaos: 'Caos (+10%)',
-                abyss: 'Abismo (+15%)',
-                pvpBoss: 'PVP/Jefe (+20%)',
-                characteristic: 'Característica',
-                none: 'Ninguno',
-                heroic: 'Heroico (+7%)',
-                swift: 'Rápido (+10%)',
-                atkSpdColour: 'Color de ATK SPD',
-                normal: 'Normal (+0%)',
-                blue: 'Azul (+10%)',
-                orange: 'Naranja (+20%)',
-                purple: 'Púrpura (+30%)',
-                guildBuff: 'Buff de Gremio',
-                secretTech: 'Tecnología Secreta',
-                equipmentAtkSpd: 'Equipo ATK SPD',
-                runeAtkSpd: 'Runa ATK SPD',
-                petGear: 'Equipo de Mascota',
-                b: 'B (6%)',
-                a: 'A (9%)',
-                s: 'S (12%)',
-                quicken: 'Acelerar',
-                lv1: 'Nv.1 (+1%)',
-                lv2: 'Nv.2 (+2%)',
-                lv3: 'Nv.3 (+3%)',
-                lv4: 'Nv.4 (+4%)',
-                lv5: 'Nv.5 (+5%)',
-                furyLv10: 'Furia Nv.10',
-                on: 'Encendido (+10%)',
-                requiredAtkSpdTarget: 'Objetivo de ATK SPD Requerido',
-                progress: 'Progreso: ',
-                requiredAtkSpd: 'ATK SPD Requerido: ',
-                finalAtkSpd: 'ATK SPD Final: ',
-                optimizer: 'Optimizador',
-                optimizeForSet: 'Optimizar para Conjunto',
-                applyOptimal: 'Aplicar Óptimo',
-                plus20RuneAlt: '+20% Runa Alt',
-                plus15EquipAlt: '+15% Equipo Alt',
-                footer: 'Gremio – Alianza Redescubre | Creador – SAGE | Construcción v2.6'
-            }
-            // Add more languages here, e.g., fr: { ... }
-        };
+  <div id="bestLine" style="font-weight:800;margin-bottom:6px">—</div>
+  <div id="bestWaste" class="muted" style="margin-bottom:10px">—</div>
+  <h2 style="margin-top:8px" data-i18n="alts">Alternates</h2>
+  <ul id="altList" style="margin:8px 0 0 18px"></ul>
+</div></div>
+  
+</main>
 
-        const languageSelect = document.getElementById('language');
-        let currentLang = 'en';
+<footer>
+  <span data-i18n="guild">Guild</span> – <strong>Rediscover Alliance</strong> |
+  <span data-i18n="creator">Creator</span> – <strong>SAGE</strong><br>
+  <span style="font-size:12px;opacity:.75">Build v2.6</span>
+</footer>
 
-        function updateLanguage(lang) {
-            currentLang = lang;
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.dataset.i18n;
-                if (translations[lang][key]) {
-                    if (el.tagName === 'OPTION' || el.tagName === 'SPAN' || el.tagName === 'P' || el.tagName === 'H1' || el.tagName === 'H2' || el.tagName === 'LABEL' || el.tagName === 'BUTTON' || el.tagName === 'FOOTER' || el.tagName === 'DIV') {
-                        el.textContent = translations[lang][key];
-                    } else {
-                        el.innerHTML = translations[lang][key];
-                    }
-                }
-            });
-            // Special handling for progress/required/final texts since they have spans
-            document.querySelector('[data-i18n="progress"]').innerHTML = translations[lang].progress + '<span id="progressText">—</span>';
-            document.querySelector('[data-i18n="requiredAtkSpd"]').innerHTML = translations[lang].requiredAtkSpd + '<span id="required">—</span>%';
-            document.querySelector('[data-i18n="finalAtkSpd"]').innerHTML = translations[lang].finalAtkSpd + '<span id="final">—</span>%';
-            calculateTotal(); // Refresh display
-        }
-
-        languageSelect.addEventListener('change', (e) => updateLanguage(e.target.value));
-        updateLanguage('en'); // Initial load
-
-        const form = document.getElementById('calcForm');
-        const elements = {
-            class: document.getElementById('class'),
-            weapon: document.getElementById('weapon'),
-            characteristic: document.getElementById('characteristic'),
-            color: document.getElementById('color'),
-            guild: document.getElementById('guild'),
-            secret: document.getElementById('secret'),
-            equip: document.getElementById('equip'),
-            rune: document.getElementById('rune'),
-            pet: document.getElementById('pet'),
-            quicken: document.getElementById('quicken'),
-            fury: document.getElementById('fury'),
-            target: document.getElementById('target')
-        };
-
-        function calculateTotal() {
-            let base = parseFloat(elements.class.value) + parseFloat(elements.weapon.value);
-            let buffs = [
-                parseFloat(elements.characteristic.value),
-                parseFloat(elements.color.value),
-                parseInt(elements.guild.value || 0),
-                parseInt(elements.secret.value || 0),
-                parseInt(elements.equip.value || 0),
-                parseInt(elements.rune.value || 0),
-                parseFloat(elements.pet.value),
-                parseFloat(elements.quicken.value),
-                elements.fury.checked ? 10 : 0
-            ];
-            let totalBuffs = buffs.reduce((sum, b) => sum + b, 0);
-            let total = Math.min(base + totalBuffs, 100); // Cap at 100%
-            let targetVal = parseInt(elements.target.value || 100);
-            let required = Math.max(0, targetVal - (base + totalBuffs));
-            let progress = Math.min((total / targetVal) * 100, 100);
-
-            document.getElementById('progressText').textContent = `${Math.round(progress)}%`;
-            document.getElementById('progressBar').style.width = `${progress}%`;
-            document.getElementById('required').textContent = `${required.toFixed(1)}`;
-            document.getElementById('final').textContent = `${total.toFixed(1)}`;
-
-            return { total, required, target: targetVal };
-        }
-
-        function optimize() {
-            const { required } = calculateTotal();
-            if (required > 0) {
-                // Simple optimization: Fill gap with rune/equip split
-                let runeAdd = Math.min(required / 2, 50);
-                let equipAdd = required - runeAdd;
-                elements.rune.value = (parseInt(elements.rune.value) + runeAdd).toFixed(0);
-                elements.equip.value = (parseInt(elements.equip.value) + equipAdd).toFixed(0);
-                calculateTotal(); // Recalc and update
-                alert(`Optimized: Added ${runeAdd}% to Rune and ${equipAdd}% to Equipment.`); // This alert can be translated if needed
-            } else {
-                alert('Already at or above target!');
-            }
-        }
-
-        function applyAlternate(field, add) {
-            elements[field].value = (parseInt(elements[field].value) + add).toFixed(0);
-            calculateTotal();
-        }
-
-        // Event listeners for real-time calc
-        Object.values(elements).forEach(el => {
-            if (el.tagName === 'SELECT' || el.type === 'number' || el.type === 'checkbox') {
-                el.addEventListener('change', calculateTotal);
-            }
-        });
-        form.addEventListener('input', calculateTotal); // For ranges if added later
-
-        // Initial calc
-        calculateTotal();
-    </script>
+<script src="i18n.js"></script>
+<script src="script.js?v=111"></script>
 </body>
 </html>
